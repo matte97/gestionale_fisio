@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PatientController;
 use Illuminate\Http\Request;
@@ -9,4 +10,5 @@ Route::post("/login",[AuthController::class,"login"]);
 
 Route::middleware("auth:sanctum")->group(function (){
     Route::apiResource("/patients",PatientController::class);
+    Route::apiResource("/appointments",AppointmentController::class);
 });
