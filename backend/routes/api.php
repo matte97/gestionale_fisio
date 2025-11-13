@@ -17,5 +17,5 @@ Route::middleware("auth:sanctum")->group(function (){
     /*Route per logout */
     Route::post("/logout",[AuthController::class,"logout"]);
     /*Route per dashboard */
-    Route::post("/dashboard",[DashboardController::class,"index"]);
+    Route::get("/dashboard",[DashboardController::class,"index"]);
 });

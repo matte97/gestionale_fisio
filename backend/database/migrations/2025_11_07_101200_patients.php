@@ -20,7 +20,11 @@ return new class extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('phone')->nullable();
             $table->date('birth_date');
-            $table->enum('gender',['M','F','Altro']);            
+            $table->enum('gender',['M','F','Altro']); 
+            $table->string('occupation',30)->nullable();
+            $table->string('sports_hobbies',50)->nullable();
+            $table->string('marital_status',30)->nullable();
+            $table->string('diagnosis',50)->nullable();        
             $table->timestamps();
         });
     }

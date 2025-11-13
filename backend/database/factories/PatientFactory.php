@@ -25,7 +25,25 @@ class PatientFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'phone' => $this->faker->unique()->phoneNumber(),
             'birth_date' => $this->faker->date('Y-m-d', '-18 years'),
-            'gender' => $this->faker->randomElement(['M', 'F', 'Altro'])
+            'gender' => $this->faker->randomElement(['M', 'F', 'Altro']),
+            'occupation' => $this->faker->randomElement([
+                'Impiegato', 'Insegnante', 'Operaio', 'Autista', 'Informatore',
+                'Cuoco', 'Commesso', 'Infermiere', 'Architetto', 'Ingegnere'
+            ]),
+
+            'sports_hobbies' => $this->faker->randomElement([
+                'Calcio', 'Tennis', 'Running', 'Nuoto', 'Lettura',
+                'Ciclismo', 'Escursionismo', 'Palestra', 'Yoga'
+            ]),
+
+            'marital_status' => $this->faker->randomElement([
+                'Single', 'Sposato', 'Divorziato', 'Vedovo'
+            ]),
+
+            'diagnosis' => $this->faker->randomElement([
+                'Ipertensione', 'Diabete', 'Cefalea', 'Dolore lombare',
+                'Ansia', 'Asma', 'Sano'
+            ]),
         ];
     }
 }
