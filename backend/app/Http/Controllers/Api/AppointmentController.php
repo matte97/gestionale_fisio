@@ -36,7 +36,7 @@ class AppointmentController extends Controller
             "patient_id" => ["required", "exists:patients,id"],
             "start_time" => ["required", "date"],
             "end_time" => ["required", "date", "after:start_time"],
-            "therapy_type" => ["string"],
+            "therapy_id" => ["required", "exists:therapies,id"],
             "status" => ["string"],
             "notes" => ["string"]
         ]);

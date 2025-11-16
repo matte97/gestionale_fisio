@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Patient;
+use App\Models\Therapy;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -26,7 +27,7 @@ class AppointmentFactory extends Factory
             'patient_id' => null,
             'start_time' => $start,
             'end_time' => $end,
-            'therapy_type' => $this->faker->randomElement(['logopedia', 'fisioterapia', 'psicoterapia']),
+            'therapy_id' => Therapy::first()?->id ?? Therapy::factory(),
             'status' => $this->faker->randomElement(['scheduled', 'completed', 'cancelled']),
             'notes' => $this->faker->sentence(),
         ];
