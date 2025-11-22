@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import axiosClient from "../Api/axiosClient";
+import { useNavigate } from "react-router-dom";
 
 function Pazienti() {
 
     const [patients, setPatients] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getPazienti = async () => {
@@ -24,9 +26,14 @@ function Pazienti() {
         try {
             await axiosClient.delete(`/patients/${id}`);
             setPatients(prev => prev.filter(p => p.id !== id));
-        }catch(err){
+        } catch (err) {
             console.log(err);
         }
+    }
+
+    const handleUpdate = (id) => {
+        navigate(`/patients/${id}/edit`);
+        console.log('premi');
     }
 
 
@@ -58,16 +65,17 @@ function Pazienti() {
                                     <td className="px-6 py-4">
                                         <div className="flex justify-between items-center gap-2">
                                             <button
-                                        className="w-24 bg-blue-600 text-center text-white text-md rounded-md p-2"
-                                        >
-                                            Modifica
-                                        </button>
-                                        <button
-                                        className="w-24 bg-red-600 text-center text-white text-md rounded-md p-2"
-                                        onClick={() => handleDelete(patient.id)}
-                                        >
-                                            Elimina
-                                        </button>
+                                                className="w-24 bg-blue-600 text-center text-white text-md rounded-md p-2"
+                                                onClick={() => handleUpdate(patient.id)}
+                                            >
+                                                Modifica
+                                            </button>
+                                            <button
+                                                className="w-24 bg-red-600 text-center text-white text-md rounded-md p-2"
+                                                onClick={() => handleDelete(patient.id)}
+                                            >
+                                                Elimina
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
