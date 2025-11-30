@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Api\AppointmentController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DashboardController as ApiDashboardController;
 use App\Http\Controllers\Api\PatientController;
+use App\Http\Controllers\Api\PatientHistoryController;
+use App\Http\Controllers\Api\PatientSymptomsController;
 use App\Http\Controllers\api\TherapyController;
-use App\Http\Controllers\DashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +20,9 @@ Route::middleware("auth:sanctum")->group(function (){
     /*Route per logout */
     Route::post("/logout",[AuthController::class,"logout"]);
     /*Route per dashboard */
-    Route::get("/dashboard",[DashboardController::class,"index"]);
+    Route::get("/dashboard",[ApiDashboardController::class,"index"]);
     /*Route per terapie */
     Route::apiResource("/therapies",TherapyController::class);
+    /*Route per scheda anamnestica*/
+    Route::apiResource("/patient_history",PatientHistoryController::class);
 });

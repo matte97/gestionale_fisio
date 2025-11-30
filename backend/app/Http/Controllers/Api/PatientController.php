@@ -17,6 +17,7 @@ class PatientController extends Controller
         $user = $request->user();
 
         $patients = Patient::where("user_id", $user->id)
+            ->with('history')
             ->orderBy("last_name")
             ->get();
 
@@ -110,7 +111,7 @@ class PatientController extends Controller
         }
 
         $patient->update($validated);
-
+        
         return response()->json([
             "success" => true,
             "message" => "Paziente aggiornato con successo.",
