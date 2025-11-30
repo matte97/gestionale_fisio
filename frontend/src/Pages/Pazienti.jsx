@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosClient from "../Api/axiosClient";
 import { useNavigate } from "react-router-dom";
+import ActionButton from "../Components/ActionButton";
 
 function Pazienti() {
 
@@ -36,6 +37,14 @@ function Pazienti() {
         console.log('premi');
     }
 
+    const goToPatientHistory = (id) => {
+        navigate(`/patients/${id}/patient_history`);
+    }
+
+    const goToEditPatientHistory = (id) => {
+        navigate(`/patients/${id}/patient_history/edit`);
+    }
+
 
 
     return (
@@ -64,18 +73,28 @@ function Pazienti() {
                                     <td className="px-6 py-4">{patient.gender}</td>
                                     <td className="px-6 py-4">
                                         <div className="flex justify-between items-center gap-2">
-                                            <button
-                                                className="w-24 bg-blue-600 text-center text-white text-md rounded-md p-2"
+                                            <ActionButton
+                                                label={"Modifica"}
                                                 onClick={() => handleUpdate(patient.id)}
-                                            >
-                                                Modifica
-                                            </button>
-                                            <button
-                                                className="w-24 bg-red-600 text-center text-white text-md rounded-md p-2"
+                                            />
+                                            <ActionButton
+                                                label={"Elimina"}
                                                 onClick={() => handleDelete(patient.id)}
-                                            >
-                                                Elimina
-                                            </button>
+                                            />
+                                            { patient.history == null ?
+                                                <button
+                                                    className="w-24 bg-green-500 text-center text-white text-md rounded-md p-2"
+                                                    onClick={() => goToPatientHistory(patient.id)}
+                                                >
+                                                    Crea
+                                                </button> :
+                                                <button
+                                                    className="w-24 bg-green-500 text-center text-white text-md rounded-md p-2"
+                                                    onClick={() => goToEditPatientHistory(patient.id)}
+                                                >
+                                                    Modifica
+                                                </button>
+                                            }
                                         </div>
                                     </td>
                                 </tr>

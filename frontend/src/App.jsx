@@ -10,6 +10,8 @@ import Calendar from './Pages/Calendar';
 import InsertPatient from './Pages/InsertPatient';
 import InsertAppointment from './Pages/InsertAppointment';
 import Therapies from './Pages/Therapies';
+import InsertPatientHistory from './Pages/InsertPatientHistory';
+import EditPatientHistory from './Pages/EditPatientHistory';
 
 function App() {
   const token = localStorage.getItem("token");
@@ -32,6 +34,8 @@ function App() {
           <Route path="appointments/add" element={<InsertAppointment/>} />
           <Route path="calendario" element={<Calendar/>} />
           <Route path="terapie" element={<Therapies/>} />
+          <Route path="patients/:id/patient_history" element={<InsertPatientHistory/>} />
+          <Route path="patients/:id/patient_history/edit" element={<EditPatientHistory/>} />
         </Route> 
       </Routes>
     </BrowserRouter>
