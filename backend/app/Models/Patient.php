@@ -31,4 +31,8 @@ class Patient extends Model
     public function appointments(){
         return $this->hasMany(Appointment::class);
     }
+
+    public function history(){
+        return $this->hasOne(PatientHistory::class);
+    }
 }
