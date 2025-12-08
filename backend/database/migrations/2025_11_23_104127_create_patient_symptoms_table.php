@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('patient_symptoms', function (Blueprint $table) {
             $table->bigIncrements('id');
+            
             $table->foreignId('patient_history_id')->constrained('patient_histories')->onDelete('cascade');
 
             $table->char('type', 1)->nullable();

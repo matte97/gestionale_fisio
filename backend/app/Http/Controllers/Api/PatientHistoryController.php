@@ -74,7 +74,11 @@ class PatientHistoryController extends Controller
                 "success" => false,
                 "message" => "Scheda paziente non trovata o non autorizzato"
             ], 404);
-        }
+        }        
+
+       $patientHistory->load("symptoms");
+
+       Log::info($patientHistory);
 
         return response()->json([
             "success" => true,

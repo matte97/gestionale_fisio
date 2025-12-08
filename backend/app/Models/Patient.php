@@ -35,4 +35,8 @@ class Patient extends Model
     public function history(){
         return $this->hasOne(PatientHistory::class);
     }
+
+    public function pastHistory(){
+        return $this->hasOne(PastHistory::class);
+    }
 }
