@@ -8,7 +8,7 @@ function TextArea({ label, name, value, onChange, rows }) {
                     value={value || ""}
                     onChange={onChange}
                     rows={rows}
-                    className="w-full border p-2 rounded resize-none"
+                    className="w-full border p-1 rounded resize-none"
                 ></textarea>
             </div>
         </>

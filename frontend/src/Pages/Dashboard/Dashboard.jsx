@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axiosClient from "../Api/axiosClient";
+import axiosClient from "../../Api/axiosClient";
 
 function Dashboard() {
 

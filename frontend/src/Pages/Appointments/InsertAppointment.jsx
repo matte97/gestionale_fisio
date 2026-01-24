@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
-import axiosClient from "../Api/axiosClient";
+import axiosClient from "../../Api/axiosClient";
 import { useNavigate } from "react-router-dom";
-import InputField from "../Components/InputField";
+import InputField from "../../Components/InputField";
 
 function InsertAppointment() {
   const navigate = useNavigate();
 
   const [appointment, setAppointment] = useState({
-    patient_id: '',
+    patient_id: "",
     date: "",
     start_hour: "",
     end_hour: "",
+    therapy_id: "",
     notes: "",
   });
 
@@ -32,13 +33,13 @@ function InsertAppointment() {
     try {
       const start_time = `${appointment.date} ${appointment.start_hour}:00`;
       const end_time = `${appointment.date} ${appointment.end_hour}:00`;
-      
+
       await axiosClient.post("/appointments", {
         patient_id: appointment.patient_id,
         start_time,
         end_time,
         notes: appointment.notes,
-        therapy_type: "standard",
+        therapy_id: appointment.therapy_id,
         status: "scheduled",
       });
 
@@ -66,6 +67,21 @@ function InsertAppointment() {
     loadPatients();
   }, []);
 
+  const [therapies, setTherapies] = useState([]);
+
+  useEffect(() => {
+    const loadTherapies = async () => {
+      try {
+        const res = await axiosClient.get("/therapies");
+        setTherapies(res.data.data);
+      } catch (err) {
+        console.log("Errore nel caricamento delle terapie:", err);
+      }
+    };
+
+    loadTherapies();
+  }, []);
+
   return (
     <div className="flex justify-center items-start p-4 w-full h-[85vh]">
       <form
@@ -87,7 +103,6 @@ function InsertAppointment() {
 
         {/* AREA SCORREVOLE */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-
           {/* Paziente */}
           <InputField
             label="Paziente"
@@ -97,7 +112,7 @@ function InsertAppointment() {
             onChange={handleChange}
             options={patients.map((p) => ({
               value: p.id,
-              label: `${p.first_name} ${p.last_name}`
+              label: `${p.first_name} ${p.last_name}`,
             }))}
           />
 
@@ -131,6 +146,18 @@ function InsertAppointment() {
             />
           </div>
 
+          <InputField
+            label="Terapia"
+            name="therapy_id"
+            type="select"
+            value={appointment.therapy_id}
+            onChange={handleChange}
+            options={therapies.map((p) => ({
+              value: p.id,
+              label: `${p.name}`
+            }))}
+          />
+
           {/* Note */}
           <InputField
             label="Note"
@@ -139,7 +166,6 @@ function InsertAppointment() {
             value={appointment.notes}
             onChange={handleChange}
           />
-
         </div>
 
         {/* FOOTER STICKY */}

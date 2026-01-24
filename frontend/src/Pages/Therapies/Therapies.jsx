@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import axiosClient from "../Api/axiosClient";
-import TherapyForm from "../Components/TherapyForm";
+import axiosClient from "../../Api/axiosClient";
+import TherapyForm from "../../Components/TherapyForm";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 export default function Therapies() {

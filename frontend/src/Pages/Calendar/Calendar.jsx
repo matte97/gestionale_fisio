@@ -11,7 +11,7 @@ import getDay from "date-fns/getDay";
 import { it } from "date-fns/locale";
 
 import { useEffect, useMemo, useState } from "react";
-import axiosClient from "../Api/axiosClient";
+import axiosClient from "../../Api/axiosClient";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 

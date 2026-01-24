@@ -118,7 +118,7 @@ export default function DashboardLayout() {
                             </button></div>
                     </nav>
                 </header>
-                <main className="flex-1 flex flex-col min-h-0 p-2 mt-10 overflow-hidden">
+                <main className="flex-1 flex flex-col m-0 p-2 mt-10">
                     <Outlet />
                 </main>
             </div>

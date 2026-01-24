@@ -1,4 +1,5 @@
 import { use, useState } from "react";
+import { createPortal } from "react-dom";
 
 function InsertSymptoms({ modal, setModal, patientHistorySymptoms, setPatientHistorySymptoms }) {
     if (!modal) return null;
@@ -54,8 +55,7 @@ function InsertSymptoms({ modal, setModal, patientHistorySymptoms, setPatientHis
 
 
 
-    return (
-        <>
+    return  createPortal(
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                 <div className="bg-white p-6 rounded shadow-lg relative w-1/2">
                     <h2 className="text-xl font-bold mb-4">Nuovo sintomo</h2>
@@ -185,8 +185,8 @@ function InsertSymptoms({ modal, setModal, patientHistorySymptoms, setPatientHis
                         </div>
                     </form>
                 </div>
-            </div>
-        </>
+            </div>,
+            document.getElementById("modal-root")
     )
 }
 
