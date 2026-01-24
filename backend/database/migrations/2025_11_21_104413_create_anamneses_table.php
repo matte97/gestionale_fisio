@@ -11,18 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('appointments', function (Blueprint $table) {
+        Schema::create('anamneses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
-            $table->foreignId('therapy_id')
-                ->nullable()
-                ->constrained('therapies')
-                ->nullOnDelete();
-            $table->enum('status', ['scheduled', 'completed', 'cancelled']);
-            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
@@ -32,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('appointments');
+        Schema::dropIfExists('anamneses');
     }
 };

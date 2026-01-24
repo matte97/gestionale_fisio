@@ -15,11 +15,24 @@ class PatientController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        $filters = $request->only(['first_name']);
 
-        $patients = Patient::where("user_id", $user->id)
-            ->with('history')
+        $query = Patient::select(
+            "patients.id as patient_id",
+            "patients.first_name",
+            "patients.last_name",
+            "patients.birth_date",
+            "patients.email",
+            "patients.user_id",
+            "patients.phone",
+            "patients.gender"
+        )
+            ->where("patients.user_id", $user->id)
+            ->filter($filters)
             ->orderBy("last_name")
-            ->get();
+            ->orderBy("id");
+
+        $patients = $query->cursorPaginate(10);
 
         return response()->json([
             "success" => true,
@@ -111,7 +124,7 @@ class PatientController extends Controller
         }
 
         $patient->update($validated);
-        
+
         return response()->json([
             "success" => true,
             "message" => "Paziente aggiornato con successo.",
@@ -122,7 +135,7 @@ class PatientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request,string $id)
+    public function destroy(Request $request, string $id)
     {
         $user = $request->user();
 

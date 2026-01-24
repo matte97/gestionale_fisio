@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PatientHistory extends Model
 {
     protected $fillable = [
-        "user_id",
-        "patient_id",
+        "anamnesis_id",
         "main_problem",
         "patient_goals",
         "onset",
@@ -23,12 +22,8 @@ class PatientHistory extends Model
         "other_diagnosis_therapies"
     ];
 
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
-
-    public function patient(){
-        return $this->belongsTo(Patient::class);
+    public function anamnesis(){
+        return $this->belongsTo(Anamnesis::class);
     }
 
     public function symptoms(){

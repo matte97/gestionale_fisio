@@ -8,6 +8,7 @@ class PastHistory extends Model
 {
     protected $fillable = [
         "user_id",
+        "anamnesis_id",
         "patient_id",
         "other_medical_conditions",
         "similar_episodes_treatments_outcome",
@@ -16,14 +17,8 @@ class PastHistory extends Model
         "family_history"
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
+    public function anamnesis(){
+        return $this->belongsTo(Anamnesis::class);
     }
-
-    public function patient(){
-        return $this->belongsTo(Patient::class);
-    }
-
 
 }

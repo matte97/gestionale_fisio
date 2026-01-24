@@ -23,13 +23,9 @@ class PatientHistoryController extends Controller
      */
     public function store(StorePatientHistoryRequest $request)
     {
-        $user = $request->user();
-
         $validate = $request->validated();
-
         $patientHistory = PatientHistory::create([
-            "user_id" => $user->id,
-            "patient_id" => $validate["patient_id"],
+            "anamnesis_id" => $validate["anamnesis_id"],
             "main_problem" => $validate["main_problem"],
             "patient_goals" => $validate["patient_goals"],
             "onset" => $validate["onset"],
@@ -62,10 +58,7 @@ class PatientHistoryController extends Controller
      */
     public function show(Request $request, string $id)
     {
-        $user = $request->user();
-
-        $patientHistory = PatientHistory::where("user_id", $user->id)
-            ->where("patient_id", $id)
+        $patientHistory = PatientHistory::where("anamnesis_id", $id)
             ->with("symptoms")
             ->first();
 

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
+use App\Models\AppointmentSession;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AppointmentController extends Controller
 {
@@ -38,7 +40,7 @@ class AppointmentController extends Controller
             "end_time" => ["required", "date", "after:start_time"],
             "therapy_id" => ["required", "exists:therapies,id"],
             "status" => ["string"],
-            "notes" => ["string"]
+            "notes" => ["string", "nullable"]
         ]);
 
         $appointment = Appointment::create([
@@ -46,9 +48,13 @@ class AppointmentController extends Controller
             "patient_id" => $validated["patient_id"],
             "start_time" => $validated["start_time"],
             "end_time" => $validated["end_time"],
-            "therapy_type" => $validated["therapy_type"],
+            "therapy_id" => $validated["therapy_id"],
             "status" => $validated["status"],
             "notes" => $validated["notes"]
+        ]);
+
+        $session = AppointmentSession::create([
+            "appointment_id" => $appointment->id
         ]);
 
         return response()->json([

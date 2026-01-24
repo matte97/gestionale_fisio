@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             );
 
         $patients = Patient::factory()
-                        ->count(5)
+                        ->count(30)
                         ->for($user)
                         ->create();
 

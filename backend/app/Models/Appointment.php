@@ -28,6 +28,10 @@ class Appointment extends Model
     }
 
     public function therapy(){
-        return $this->belongsTo(Therapy::class);
+        return $this->hasOne(Therapy::class);
+    }
+
+    public function session(){
+        return $this->hasOne(AppointmentSession::class);
     }
 }

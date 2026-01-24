@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('past_histories', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
 
-            $table->foreignId('patient_history_id')->constrained('patient_histories')->onDelete('cascade');
+            $table->foreignId('anamnesis_id')->constrained('anamneses')->onDelete('cascade');
 
             $table->text('other_medical_conditions')->nullable();
             $table->text('similar_episodes_treatments_outcome')->nullable();

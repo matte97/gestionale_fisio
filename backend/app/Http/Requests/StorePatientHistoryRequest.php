@@ -22,7 +22,7 @@ class StorePatientHistoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "patient_id" => ["required", "exists:patients,id"],
+            "anamnesis_id" => ["required", "exists:anamneses,id"],
 
             "main_problem"               => ["nullable", "string"],
             "patient_goals"              => ["nullable", "string"],

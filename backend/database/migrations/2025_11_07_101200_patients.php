@@ -13,19 +13,21 @@ return new class extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('first_name');
-            $table->string('last_name');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->index();
+            $table->string('first_name')->index();
+            $table->string('last_name')->index();
             $table->string('address');
             $table->string('email')->unique()->nullable();
             $table->string('phone')->nullable();
-            $table->date('birth_date');
-            $table->enum('gender',['M','F','Altro']); 
+            $table->date('birth_date')->index();
+            $table->enum('gender',['M','F','Altro'])->index(); 
             $table->string('occupation',30)->nullable();
             $table->string('sports_hobbies',50)->nullable();
             $table->string('marital_status',30)->nullable();
             $table->string('diagnosis',50)->nullable();        
             $table->timestamps();
+
+            $table->index(['user_id', 'last_name']);
         });
     }
 
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists(); 
+        Schema::dropIfExists('patients'); 
     }
 };

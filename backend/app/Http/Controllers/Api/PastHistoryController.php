@@ -22,23 +22,19 @@ class PastHistoryController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info("entro qui?");
         $user = $request->user();
 
         $validate = $request->validate([
-            "patient_history_id" => ["required", "exists:patient_histories,id"],
+            "anamnesis_id" => ["required", "exists:anamneses,id"],
             "other_medical_conditions" => ["string"],
             "similar_episodes_treatments_outcome" => ["string"],
             "medication_use" => ["string"],
             "physiological_history" => ["string"],
             "family_history" => ["string"]
         ]);
-
-        Log::info("user -> ".$user."validate -> ".var_export($validate));
-
+        Log::info($validate["anamnesis_id"]);
         $pastHistory = PastHistory::create([
-            "user_id" => $user->id,
-            "patient_id" => $validate["patient_id"],
+            "anamnesis_id" => $validate["anamnesis_id"],
             "other_medical_conditions" => $validate["other_medical_conditions"],
             "similar_episodes_treatments_outcome" => $validate["similar_episodes_treatments_outcome"],
             "medication_use" => $validate["medication_use"],
