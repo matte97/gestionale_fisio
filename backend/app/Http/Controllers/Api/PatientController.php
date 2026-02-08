@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Patients\StorePatientRequest;
+use App\Http\Requests\Patients\UpdatePatientRequest;
+use App\Http\Resources\PatientResource;
 use App\Models\Patient;
+use App\Services\PatientService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -12,109 +16,71 @@ class PatientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, PatientService $service)
     {
-        $user = $request->user();
-        $filters = $request->only(['first_name']);
-
-        $query = Patient::select(
-            "patients.id as patient_id",
-            "patients.first_name",
-            "patients.last_name",
-            "patients.birth_date",
-            "patients.email",
-            "patients.user_id",
-            "patients.phone",
-            "patients.gender"
-        )
-            ->where("patients.user_id", $user->id)
-            ->filter($filters)
-            ->orderBy("last_name")
-            ->orderBy("id");
-
-        $patients = $query->cursorPaginate(10);
+        $patients = $service->list(
+            $request->user(),
+            $request->only('first_name')
+        );
 
         return response()->json([
-            "success" => true,
-            "data" => $patients
+            'success' => true,
+            'message' => 'Pazienti caricati con successo',
+            'data' => PatientResource::collection($patients)
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StorePatientRequest $request, PatientService $service)
     {
         $user = $request->user();
 
-        $validated = $request->validate([
-            "first_name" => ["required", "string", "max:100"],
-            "last_name" => ["required", "string", "max:100"],
-            "address" => ["nullable", "string"],
-            "email" => ["nullable", "email"],
-            "phone" => ["nullable", "string", "max:15"],
-            "birth_date" => ["nullable", "date"],
-            "gender" => ["nullable", "string", "max:10"]
-        ]);
+        $validated = $request->validated();
 
-        $patient = Patient::create([
-            "first_name" => $validated["first_name"],
-            "last_name" => $validated["last_name"],
-            "address" => $validated["address"],
-            "email" => $validated["email"],
-            "phone" => $validated["phone"],
-            "birth_date" => $validated["birth_date"],
-            "gender" => $validated["gender"],
-            "user_id" => $user->id
-        ]);
+        $patient = $service->create($user, $validated);
 
         return response()->json([
-            "success" => true,
-            "message" => "Paziente creato con successo",
-            "data" => $patient
+            'success' => true,
+            'message' => 'Paziente creato con successo',
+            'data'    => new PatientResource($patient),
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $id)
+    public function show(Request $request, PatientService $service, string $id)
     {
         $user = $request->user();
-
-        $patient = Patient::where("user_id", $user->id)->find($id);
-
+        Log::info($user);
+        $patient = $service->findById($user, $id);
+        Log::info('Tipo di patient: ' . get_class($patient));
+        
         if (!$patient) {
             return response()->json([
-                "success" => false,
-                "message" => "Paziente non trovato o non autorizzato"
+                'success' => false,
+                'message' => 'Paziente non trovato o non autorizzato'
             ], 404);
         }
 
         return response()->json([
-            "success" => true,
-            "data" => $patient
+            'success' => true,
+            'message' => 'Paziente trovato con successo',
+            'data'    => new PatientResource($patient)
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdatePatientRequest $request, PatientService $service, string $id)
     {
-        $validated = $request->validate([
-            "first_name" => ["required", "string", "max:100"],
-            "last_name" => ["required", "string", "max:100"],
-            "address" => ["nullable", "string"],
-            "email" => ["nullable", "email"],
-            "phone" => ["nullable", "string", "max:15"],
-            "birth_date" => ["nullable", "date"],
-            "gender" => ["nullable", "string", "max:10"]
-        ]);
-
+        $validated = $request->validated();
         $user = $request->user();
 
-        $patient = Patient::where("user_id", $user->id)->find($id);
+        $patient = $service->update($user, $id, $validated);
 
         if (!$patient) {
             return response()->json([
@@ -123,33 +89,29 @@ class PatientController extends Controller
             ], 404);
         }
 
-        $patient->update($validated);
-
         return response()->json([
             "success" => true,
             "message" => "Paziente aggiornato con successo.",
-            "data" => $patient
+            "data"    => new PatientResource($patient),
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, string $id)
+    public function destroy(Request $request, PatientService $service, string $id)
     {
         $user = $request->user();
 
-        $patient = Patient::where("user_id", $user->id)->find($id);
+        $deleted = $service->delete($user,$id);
 
-        if (!$patient) {
+        if (!$deleted) {
             return response()->json([
                 "success" => false,
                 "message" => "Paziente non trovato o non autorizzato"
             ], 404);
         }
-
-        $patient->delete();
-
+        
         return response()->json([
             "success" => true,
             "message" => "Paziente eliminato con successo."

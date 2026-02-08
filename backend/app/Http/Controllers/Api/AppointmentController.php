@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Appointments\StoreAppointmentRequest;
+use App\Http\Requests\Appointments\UpdateAppointmentRequest;
+use App\Http\Resources\AppointmentResource;
 use App\Models\Appointment;
 use App\Models\AppointmentSession;
+use App\Services\AppointmentService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -13,96 +17,68 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, AppointmentService $service, $patientId)
     {
-        $user = $request->user();
-
-        $appointments = Appointment::where("user_id", $user->id)
-            ->orderBy("start_time")
-            ->get();
+        $patientId = $request->query("patient_id");
+        $appointments = $service->list($request->user(),$patientId);
 
         return response()->json([
             "success" => true,
-            "data" => $appointments
+            "message" => "Appuntamenti caricati con successo",
+            "data"    => AppointmentResource::collection($appointments)
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAppointmentRequest $request, AppointmentService $service)
     {
         $user = $request->user();
+        $patient = $request->query("patient_id");
+        $validated = $request->validated();
 
-        $validated = $request->validate([
-            "patient_id" => ["required", "exists:patients,id"],
-            "start_time" => ["required", "date"],
-            "end_time" => ["required", "date", "after:start_time"],
-            "therapy_id" => ["required", "exists:therapies,id"],
-            "status" => ["string"],
-            "notes" => ["string", "nullable"]
-        ]);
-
-        $appointment = Appointment::create([
-            "user_id" => $user->id,
-            "patient_id" => $validated["patient_id"],
-            "start_time" => $validated["start_time"],
-            "end_time" => $validated["end_time"],
-            "therapy_id" => $validated["therapy_id"],
-            "status" => $validated["status"],
-            "notes" => $validated["notes"]
-        ]);
-
-        $session = AppointmentSession::create([
-            "appointment_id" => $appointment->id
-        ]);
+        $appointment = $service->create($user, $patient, $validated);
 
         return response()->json([
             "success" => true,
             "message" => "Appuntamento creato con successo",
-            "data" => $appointment
+            "data"    => AppointmentResource::collection($appointment)
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $id)
+    public function show(Request $request, string $id, AppointmentService $service)
     {
         $user = $request->user();
-
-        $appointment = Appointment::where("user_id", $user->id)->find($id);
-
+        $patient = $request->query("patient_id");
+        $appointment = $service->findById($user->id,$id,$patient);
         if (!$appointment) {
             return response()->json([
                 "success" => false,
-                "data" => "Appuntamento non trovato o non autorizzato"
+                "message" => "Appuntamento non trovato o non autorizzato"
             ], 404);
         }
 
         return response()->json([
             "success" => true,
-            "data" => $appointment
+            "message" => "Appuntamento trovato con successo",
+            "data"    => AppointmentResource::collection($appointment)
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateAppointmentRequest $request, string $id, AppointmentService $service)
     {
         $user = $request->user();
 
-        $validated = $request->validate([
-            "patient_id" => ["required"],
-            "start_time" => ["required", "date"],
-            "end_time" => ["required", "date", "after:start_time"],
-            "therapy_type" => ["string"],
-            "status" => ["string", "in:scheduled,completed,cancelled"],
-            "notes" => ["string"]
-        ]);
+        $validated = $request->validated();
 
-        $appointment = Appointment::where('user_id', $user->id)->find($id);
+        $appointment = $service->update($user, $id, $validated);
 
         if (!$appointment) {
             return response()->json([
@@ -111,23 +87,21 @@ class AppointmentController extends Controller
             ], 404);
         }
 
-        $appointment->update($validated);
-
         return response()->json([
             "success" => true,
             "message" => "Appuntamento aggiornato con successo",
-            "data" => $appointment
+            "data"    => AppointmentResource::collection($appointment)
         ], 201);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, string $id)
+    public function destroy(Request $request, string $id, AppointmentService $service)
     {
         $user = $request->user();
-
-        $appointment = Appointment::where("user_id", $user->id)->find($id);
+        $patient = $request->query("patient_id");
+        $appointment = $service->delete($user,$id,$patient);
 
         if (!$appointment) {
             return response()->json([
@@ -135,8 +109,6 @@ class AppointmentController extends Controller
                 "data" => "Appuntamento non trovato o non autorizzato."
             ], 404);
         }
-
-        $appointment->delete();
 
         return response()->json([
             "success" => true,

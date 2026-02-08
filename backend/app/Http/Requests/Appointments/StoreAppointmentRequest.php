@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Patients;
+namespace App\Http\Requests\Appointments;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PatientFilterRequest extends FormRequest
+class StoreAppointmentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,12 @@ class PatientFilterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "first_name" => "nullable|string|max:255"
+            "patient_id" => ["required", "exists:patients,id"],
+            "start_time" => ["required", "date"],
+            "end_time"   => ["required", "date", "after:start_time"],
+            "therapy_id" => ["required", "exists:therapies,id"],
+            "status"     => ["string", "nullable"],
+            "notes"      => ["string", "nullable"]
         ];
     }
 }

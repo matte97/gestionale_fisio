@@ -32,7 +32,7 @@ class AuthController extends Controller
         Log::info("Nuovo token creato per {$user->email}: {$token}");
 
         return response()->json([
-            "user" => $user,
+            /*"user" => $user,*/
             "token" => $token,
             "token_type" => "bearer"
         ]);
