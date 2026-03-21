@@ -53,11 +53,12 @@ export default function usePatientHistory(anamnesisId, mode = "create") {
     fetchHistory();
   }, [anamnesisId, mode]);
 
-  const handleChange = (e) => {
-    setPatientHistory((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+  const handleChange = (eOrName, value) => {
+    if (typeof eOrName === 'string') {
+      setPatientHistory((prev) => ({ ...prev, [eOrName]: value }));
+    } else {
+      setPatientHistory((prev) => ({ ...prev, [eOrName.target.name]: eOrName.target.value }));
+    }
   };
 
   const handleSubmit = async (e) => {

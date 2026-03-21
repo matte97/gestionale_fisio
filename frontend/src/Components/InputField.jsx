@@ -32,7 +32,7 @@ export default function InputField({
           {...rest}
           className="border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-indigo-500"
         >
-          <option value="">-- Seleziona --</option>
+          <options value="">-- Seleziona --</options>
           {options.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}

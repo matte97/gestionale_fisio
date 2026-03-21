@@ -1,0 +1,99 @@
+import { useState } from "react";
+import { CreatePastHistoryPayload } from "../PastHistory/pastHistory.types";
+import { CreatePatientHistoryPayload } from "../PatientHistory/patientHistory.type";
+import { CreateAnamnesisPayload } from "./anamnesis.type";
+import { CreateConditionAssesmentPayload } from "../ConditionAssesment/conditionAssesment.type";
+import { CreatePhysicalExaminationPayload } from "../PhisycalExaminations/physicalExaminations.types";
+import { CreatePhysicaltherapyDiagnosisPayload } from "../PhysicalTherapyDiagnosis/PhysicalTherapyDiagnosis.types";
+import { MultiStepForm } from "../../Shared/Components/MultiStepForm";
+import { PhysicalTherapyDiagnosisFormLayout } from "../PhysicalTherapyDiagnosis/Utils/PhysicalTherapyDiagnosisFormLayout";
+import { PhysicalExaminationFormLayout } from "../PhisycalExaminations/Utils/PhysicalExaminationFormLayout";
+import { conditionAssesmentsFormLayout } from "../ConditionAssesment/Utils/conditionAssessmentFormLayout";
+import { pastHistoryFormLayout } from "../PastHistory/Utils/pastHistoryFormLayout";
+import { patientHistoryFormLayout } from "../PatientHistory/Utils/patientHistoryFormLayout";
+
+type FormDataMulti = {
+  anamnesi: CreateAnamnesisPayload;
+  patientHistory: CreatePatientHistoryPayload;
+  pastHistory: CreatePastHistoryPayload;
+  conditionAssesment: CreateConditionAssesmentPayload;
+  physicalExamination: CreatePhysicalExaminationPayload;
+  physicalTherapyDiagnosis: CreatePhysicaltherapyDiagnosisPayload;
+};
+
+export function AnamnesisWizard() {
+  const [step, setStep] = useState(0);
+
+  const [formData, setFormData] = useState<FormDataMulti>({
+    anamnesi: {} as CreateAnamnesisPayload,
+    patientHistory: {} as CreatePatientHistoryPayload,
+    pastHistory: {} as CreatePastHistoryPayload,
+    conditionAssesment: {} as CreateConditionAssesmentPayload,
+    physicalExamination: {} as CreatePhysicalExaminationPayload,
+    physicalTherapyDiagnosis: {} as CreatePhysicaltherapyDiagnosisPayload,
+  });
+
+  const updateData = <K extends keyof FormDataMulti>(
+    key: K,
+    data: Partial<FormDataMulti[K]>
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      [key]: { ...prev[key], ...data },
+    }));
+  };
+
+  const MIN_STEP = 0;
+  const MAX_STEP = 4;
+  const nextStep = () => setStep((prev) => (prev < MAX_STEP ? prev + 1 : prev));
+  const prevStep = () => setStep((prev) => (prev > MIN_STEP ? prev - 1 : prev));
+  const submitAll = () => console.log("Invio finale:", formData);
+
+  const steps = [
+    {
+      data: formData.patientHistory,
+      updateKey: "patientHistory",
+      fields: patientHistoryFormLayout,
+      titolo: "Anamnesi prossima",
+    },
+    {
+      data: formData.pastHistory,
+      updateKey: "pastHistory",
+      fields: pastHistoryFormLayout,
+      titolo: "Anamnesi remota",
+    },
+    {
+      data: formData.conditionAssesment,
+      updateKey: "conditionAssesment",
+      fields: conditionAssesmentsFormLayout,
+      titolo: "Categorie di ragionamento clinico pre-esame fisico",
+    },
+    {
+      data: formData.physicalExamination,
+      updateKey: "physicalExamination",
+      fields: PhysicalExaminationFormLayout,
+      titolo: "Esame fisico",
+    },
+    {
+      data: formData.physicalTherapyDiagnosis,
+      updateKey: "physicalTherapyDiagnosis",
+      fields: PhysicalTherapyDiagnosisFormLayout,
+      titolo: "Diagnosi fisioterapica",
+    },
+  ];
+
+  const currentStep = steps[step];
+
+  return (
+    <MultiStepForm
+      data={currentStep.data}
+      fields={currentStep.fields}
+      titolo={currentStep.titolo}
+      next={step === MAX_STEP ? submitAll : nextStep}
+      prev={prevStep}
+      onChange={(name, value) =>
+        updateData(currentStep.updateKey as keyof FormDataMulti, { [name]: value })
+      }
+    />
+  );
+}
