@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axiosClient from "../../../Api/axiosClient";
 import { useNavigate, useParams } from "react-router-dom";
-import CardAnamnesis from "../../../Components/CardAnamnesis";
+import CardAnamnesis from "./CardAnamnesis";
 
 type AnamnesisRecord = {
     id: number;

@@ -1,7 +1,7 @@
 import axios, { InternalAxiosRequestConfig } from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api",
   headers: {
     "Content-Type": "application/json",
   },
@@ -16,6 +16,25 @@ axiosClient.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+axiosClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    try {
+      const { response } = error;
+      if (response && response.status === 401) {
+        localStorage.removeItem('token');
+        // Redirige al login preventivamente
+        window.location.href = '/';
+      }
+    } catch (e) {
+      console.error(e);
+    }
     return Promise.reject(error);
   }
 );

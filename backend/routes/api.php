@@ -9,7 +9,7 @@ use App\Http\Controllers\Api\DashboardController as ApiDashboardController;
 use App\Http\Controllers\Api\PastHistoryController;
 use App\Http\Controllers\Api\PatientController;
 use App\Http\Controllers\Api\PatientHistoryController;
-use App\Http\Controllers\api\TherapyController;
+use App\Http\Controllers\Api\TherapyController;
 use Illuminate\Support\Facades\Route;
 
 Route::post("/login", [AuthController::class, "login"]);

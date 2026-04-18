@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import axiosClient from "../../../Api/axiosClient";
-import TherapyForm from "../../../Components/TherapyForm";
+import TherapyForm from "./TherapyForm";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 type Therapy = {
-  id: number;
-  name: string;
-  color: string;
-  [key: string]: any;
+    id: number;
+    name: string;
+    color: string;
+    [key: string]: any;
 };
 
 export function Therapies() {
@@ -48,7 +48,7 @@ export function Therapies() {
         try {
             await axiosClient.delete(`/therapies/${id}`);
             setTherapies(prev => prev.filter(t => t.id !== id));
-            if(selectedTherapy?.id === id) {
+            if (selectedTherapy?.id === id) {
                 setMode("none");
                 setSelectedTherapy(null);
             }
@@ -59,17 +59,15 @@ export function Therapies() {
 
     return (
         <div className="w-full max-w-7xl mx-auto animate-fade-in flex flex-col h-[calc(100vh-140px)] min-h-[500px]">
-             
-            {/* Header Wrapper */}
+
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6 flex shrink-0 justify-between items-center">
                 <div>
-                   <h2 className="text-xl font-bold text-gray-800">Elenco Terapie Erogabili</h2>
-                   <p className="text-sm text-gray-500 mt-1">Gestisci la nomenclature visiva delle tue terapie in archivio.</p>
+                    <h2 className="text-xl font-bold text-gray-800">Elenco Terapie Erogabili</h2>
+                    <p className="text-sm text-gray-500 mt-1">Gestisci la nomenclature visiva delle tue terapie in archivio.</p>
                 </div>
             </div>
 
             <div className="flex w-full flex-1 gap-6 min-h-0">
-                {/* 📌 COLONNA SINISTRA — TABELLA TERAPIE */}
                 <div className="w-1/2 h-full bg-white rounded-2xl shadow-sm border border-gray-100 flex flex-col overflow-hidden">
                     <div className="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 shrink-0">
                         <h2 className="text-lg font-bold text-gray-800">Archivio Terapie</h2>
@@ -118,18 +116,17 @@ export function Therapies() {
                                     </tr>
                                 ))}
                                 {therapies.length === 0 && (
-                                   <tr>
-                                      <td colSpan={3} className="px-6 py-12 text-center italic text-gray-400">
-                                         Nessuna terapia censita a sistema.
-                                      </td>
-                                   </tr>
+                                    <tr>
+                                        <td colSpan={3} className="px-6 py-12 text-center italic text-gray-400">
+                                            Nessuna terapia censita a sistema.
+                                        </td>
+                                    </tr>
                                 )}
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                {/* 📌 COLONNA DESTRA — FORM DINAMICO */}
                 <div className="w-1/2 h-full flex flex-col">
                     {mode === "none" && (
                         <div className="h-full bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center text-gray-400 italic">

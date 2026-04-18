@@ -43,7 +43,7 @@ class AppointmentController extends Controller
         return response()->json([
             "success" => true,
             "message" => "Appuntamento creato con successo",
-            "data"    => AppointmentResource::collection($appointment)
+            "data"    => new AppointmentResource($appointment)
         ], 201);
     }
 
@@ -65,7 +65,7 @@ class AppointmentController extends Controller
         return response()->json([
             "success" => true,
             "message" => "Appuntamento trovato con successo",
-            "data"    => AppointmentResource::collection($appointment)
+            "data"    => new AppointmentResource($appointment)
         ]);
     }
 
@@ -90,7 +90,7 @@ class AppointmentController extends Controller
         return response()->json([
             "success" => true,
             "message" => "Appuntamento aggiornato con successo",
-            "data"    => AppointmentResource::collection($appointment)
+            "data"    => new AppointmentResource($appointment)
         ], 201);
     }
 

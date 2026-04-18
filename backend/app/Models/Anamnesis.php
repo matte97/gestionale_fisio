@@ -12,22 +12,29 @@ class Anamnesis extends Model
     ];
 
     public function user(){
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function patient(){
-        $this->belongsTo(Patient::class);
+        return $this->belongsTo(Patient::class);
     }
 
     public function patient_history(){
-        $this->hasOne(PatientHistory::class);
+        return $this->hasOne(PatientHistory::class);
     }
 
     public function past_history(){
-        $this->hasOne(PastHistory::class);
+        return $this->hasOne(PastHistory::class);
     }
 
     public function condition_assessment(){
-        $this->hasOne(ConditionAssessment::class);
+        return $this->hasOne(ConditionAssessment::class);
+    }
+    public function physical_examination(){
+        return $this->hasOne(PhysicalExamination::class);
+    }
+
+    public function physical_therapy_diagnosis(){
+        return $this->hasOne(PhysicalTherapyDiagnosis::class);
     }
 }

@@ -24,7 +24,10 @@ class DashboardController extends Controller
         return response()->json([
             "total_appointments" => $total_appointments,
             "total_patients" => $total_patients,
-            "today_appointment" => $appointments_today
+            "today_appointments" => $appointments_today,
+            "new_patients_this_month" => 0, // TODO: da calcolare
+            "new_patients_last_month" => 0, // TODO: da calcolare
+            "patients_this_month" => 0 // TODO: da calcolare
         ]);
     }
 }

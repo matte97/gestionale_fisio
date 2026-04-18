@@ -11,6 +11,8 @@ import { PhysicalExaminationFormLayout } from "../PhisycalExaminations/Utils/Phy
 import { conditionAssesmentsFormLayout } from "../ConditionAssesment/Utils/conditionAssessmentFormLayout";
 import { pastHistoryFormLayout } from "../PastHistory/Utils/pastHistoryFormLayout";
 import { patientHistoryFormLayout } from "../PatientHistory/Utils/patientHistoryFormLayout";
+import axiosClient from "../../Api/axiosClient";
+import { useNavigate } from "react-router-dom";
 
 type FormDataMulti = {
   anamnesi: CreateAnamnesisPayload;
@@ -45,9 +47,31 @@ export function AnamnesisWizard() {
 
   const MIN_STEP = 0;
   const MAX_STEP = 4;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+
   const nextStep = () => setStep((prev) => (prev < MAX_STEP ? prev + 1 : prev));
   const prevStep = () => setStep((prev) => (prev > MIN_STEP ? prev - 1 : prev));
-  const submitAll = () => console.log("Invio finale:", formData);
+
+  const submitAll = async () => {
+    setIsSubmitting(true);
+    try {
+      await axiosClient.post("/anamnesis", formData);
+      alert("Anamnesi salvata con successo!");
+      
+      // Assumendo anamnesi.patient_id sia popolato:
+      if (formData.anamnesi.patient_id) {
+         navigate(`/pazienti/${formData.anamnesi.patient_id}/record`);
+      } else {
+         navigate(`/pazienti`);
+      }
+    } catch (error) {
+      console.error("Errore salvataggio anamnesi:", error);
+      alert("Errore durante il salvataggio. Controlla la console.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const steps = [
     {

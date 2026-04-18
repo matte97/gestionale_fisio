@@ -1,6 +1,12 @@
 import { FaPlus, FaRegFolderOpen } from "react-icons/fa";
 
-function CardAnamnesis({ id, isNew, click }) {
+type CardAnamnesisProps = {
+  id: number;
+  isNew: boolean;
+  click: () => void;
+};
+
+function CardAnamnesis({ id, isNew, click }: CardAnamnesisProps) {
   if (isNew) {
     return (
       <div
@@ -32,6 +38,7 @@ function CardAnamnesis({ id, isNew, click }) {
 
   return (
     <div
+      onClick={click}
       className="
       w-full h-36
       flex flex-col

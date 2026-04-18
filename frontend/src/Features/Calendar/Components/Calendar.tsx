@@ -28,7 +28,7 @@ export function Calendar() {
         locale: 'it-IT',
         views: [createViewDay(), createViewWeek(), createViewMonthGrid()],
         defaultView: 'week',
-        events: events,
+        events: [], // Starts empty, populated strictly via events.set()
         dayBoundaries: {
             start: '07:00',
             end: '21:00',
@@ -39,14 +39,12 @@ export function Calendar() {
         callbacks: {
             onEventUpdate: async (updatedEvent: any) => {
                 try {
-                    // Schedule-X restituisce start/end come 'YYYY-MM-DD HH:mm'. Inviamo col :00 al DB.
                     await axiosClient.put(`/appointments/${updatedEvent.id}`, {
                         start_time: updatedEvent.start + ':00',
                         end_time: updatedEvent.end + ':00'
                     });
                 } catch (e) {
                     console.error("Errore nel salvataggio evento", e);
-                    // L'evento verrà ripristinato dal successivo fetch / cache invalidation, qua intanto logghiamo
                 }
             }
         }
@@ -57,15 +55,39 @@ export function Calendar() {
     ]);
 
     useEffect(() => {
-        if (appointments) {
-            const mappedEvents = appointments.map((a: any) => ({
-                id: String(a.id),
-                title: a.notes || "Appuntamento",
-                start: format(new Date(a.start_time), 'yyyy-MM-dd HH:mm'),
-                end: format(new Date(a.end_time), 'yyyy-MM-dd HH:mm')
-            }));
+        if (appointments && Array.isArray(appointments)) {
+            const mappedEvents = appointments
+                .filter((a: any) => a.start_time && a.end_time) // Reject corrupt entries
+                .map((a: any) => {
+                    // Safe parsing handling both ISO strings (T) and raw SQL times
+                    let startStr = a.start_time;
+                    let endStr = a.end_time;
+                    
+                    try {
+                        if (startStr.includes('T')) {
+                           startStr = format(new Date(startStr), 'yyyy-MM-dd HH:mm');
+                        } else {
+                           startStr = startStr.substring(0, 16); // Extract YYYY-MM-DD HH:mm
+                        }
+                        
+                        if (endStr.includes('T')) {
+                           endStr = format(new Date(endStr), 'yyyy-MM-dd HH:mm');
+                        } else {
+                           endStr = endStr.substring(0, 16);
+                        }
+                    } catch(e) {
+                        return null; // Flag for internal filter
+                    }
+
+                    return {
+                        id: String(a.id),
+                        title: a.notes || "Appuntamento",
+                        start: startStr,
+                        end: endStr
+                    };
+                })
+                .filter(Boolean); // Drop flagged exceptions
             
-            setEvents(mappedEvents);
             calendar.events.set(mappedEvents);
         }
     }, [appointments]);

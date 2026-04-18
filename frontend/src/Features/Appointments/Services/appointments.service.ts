@@ -18,7 +18,7 @@ export const getAppointmentByUserId = async ({
   patient_id,
 }: GetAppointmentParams): Promise<Appointment[]> => {
   const response = await axiosClient.get<AppointmentsResponse>(
-    `/appointments/${patient_id}`,
+    `/appointments`, { params: { patient_id } }
   );
   return response.data.data;
 };
@@ -26,6 +26,7 @@ export const getAppointmentByUserId = async ({
 export const getAppointments = async (): Promise<Appointment[]> => {
   const response = await axiosClient.get<AppointmentsResponse>("/appointments");
   return response.data.data;
+
 };
 
 type AppointmentResponse = {
