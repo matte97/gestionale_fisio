@@ -3,51 +3,27 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
-    public function login(Request $request)
+    public function login(LoginRequest $request, AuthService $service)
     {
-        $validated = $request->validate([
-            "email" => ["required", "email"],
-            "password" => ["required", "string", "min:6"]
-        ]);
-
-        $user = User::where("email", $validated["email"])->first();
-
-        if (!$user || !Hash::check($validated["password"], $user->password)) {
-            throw ValidationException::withMessages([
-                "email" => "Credenziali non valide"
-            ]);
-        }
-
-        $token = $user->createToken("auth_token")->plainTextToken;
-
-        Log::info("Nuovo token creato per {$user->email}: {$token}");
+        $token = $service->login($request->validated());
 
         return response()->json([
-            /*"user" => $user,*/
             "token" => $token,
             "token_type" => "bearer"
         ]);
     }
 
-    public function logout(Request $request)
+    public function logout(Request $request, AuthService $service)
     {
-        $token = $request->bearerToken();
-        Log::info('Token grezzo:', [$token]);
+        $loggedOut = $service->logout($request->bearerToken());
 
-        $personalToken = PersonalAccessToken::findToken($token);
-        Log::info('Token trovato:', [$personalToken]);
-
-        if ($personalToken) {
-            $personalToken->delete();
+        if ($loggedOut) {
             return response()->json([
                 "message" => "Logout effettuato correttamente"
             ]);

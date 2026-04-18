@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class PatientController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request, PatientService $service)
     {
         $patients = $service->list(
@@ -30,9 +28,7 @@ class PatientController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(StorePatientRequest $request, PatientService $service)
     {
         $user = $request->user();
@@ -48,9 +44,7 @@ class PatientController extends Controller
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Request $request, PatientService $service, string $id)
     {
         $user = $request->user();
@@ -72,9 +66,7 @@ class PatientController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(UpdatePatientRequest $request, PatientService $service, string $id)
     {
         $validated = $request->validated();
@@ -96,9 +88,7 @@ class PatientController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Request $request, PatientService $service, string $id)
     {
         $user = $request->user();

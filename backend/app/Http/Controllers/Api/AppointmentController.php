@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 class AppointmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request, AppointmentService $service, $patientId)
     {
         $patientId = $request->query("patient_id");
@@ -29,9 +27,7 @@ class AppointmentController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(StoreAppointmentRequest $request, AppointmentService $service)
     {
         $user = $request->user();
@@ -47,9 +43,7 @@ class AppointmentController extends Controller
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Request $request, string $id, AppointmentService $service)
     {
         $user = $request->user();
@@ -69,9 +63,7 @@ class AppointmentController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(UpdateAppointmentRequest $request, string $id, AppointmentService $service)
     {
         $user = $request->user();
@@ -94,9 +86,7 @@ class AppointmentController extends Controller
         ], 201);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Request $request, string $id, AppointmentService $service)
     {
         $user = $request->user();

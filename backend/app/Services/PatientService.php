@@ -10,12 +10,16 @@ class PatientService
 {
     public function list($user, array $filters)
     {
-        return Patient::where("user_id", $user->id)
-            ->with("anamnesis")
-            ->filter($filters)
-            ->orderBy("last_name")
-            ->orderBy("id")
-            ->cursorPaginate(10);
+        $cacheKey = "patients_user_{$user->id}_" . md5(json_encode($filters));
+
+        return \Illuminate\Support\Facades\Cache::tags(["patients_{$user->id}"])->remember($cacheKey, 3600, function () use ($user, $filters) {
+            return Patient::where("user_id", $user->id)
+                ->with("anamnesis")
+                ->filter($filters)
+                ->orderBy("last_name")
+                ->orderBy("id")
+                ->cursorPaginate(10);
+        });
     }
 
     public function create($user, array $data)
@@ -30,6 +34,8 @@ class PatientService
                 "patient_id" => $patient->id
             ]);
 
+            \Illuminate\Support\Facades\Cache::tags(["patients_{$user->id}"])->flush();
+
             return $patient;
         });
     }
@@ -43,6 +49,8 @@ class PatientService
         }
 
         $patient->update($data);
+
+        \Illuminate\Support\Facades\Cache::tags(["patients_{$user->id}"])->flush();
 
         return $patient;
     }
@@ -62,6 +70,12 @@ class PatientService
             return false;
         }
 
-        return (bool) $patient->delete();
+        $deleted = $patient->delete();
+
+        if ($deleted) {
+            \Illuminate\Support\Facades\Cache::tags(["patients_{$user->id}"])->flush();
+        }
+
+        return (bool) $deleted;
     }
 }

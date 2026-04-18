@@ -10,10 +10,14 @@ class AppointmentService
 {
     public function list($user, $patientId)
     {
-        return Appointment::where("user_id", $user->id)
-            ->where("patient_id", $patientId)
-            ->orderby("start_time")
-            ->get();
+        $cacheKey = "appointments_user_{$user->id}_patient_{$patientId}";
+
+        return \Illuminate\Support\Facades\Cache::tags(["appointments_{$user->id}"])->remember($cacheKey, 3600, function () use ($user, $patientId) {
+            return Appointment::where("user_id", $user->id)
+                ->where("patient_id", $patientId)
+                ->orderby("start_time")
+                ->get();
+        });
     }
 
     public function create($user, $patient, array $data)
@@ -28,6 +32,8 @@ class AppointmentService
                 "appointment_id" => $appointment->id,
             ]);
 
+            \Illuminate\Support\Facades\Cache::tags(["appointments_{$user->id}"])->flush();
+
             return $appointment;
         });
     }
@@ -41,6 +47,8 @@ class AppointmentService
         }
 
         $appointment->update($data);
+
+        \Illuminate\Support\Facades\Cache::tags(["appointments_{$user->id}"])->flush();
 
         return $appointment;
     }
@@ -62,6 +70,12 @@ class AppointmentService
             return null;
         }
 
-        return (bool) $appointment->delete();
+        $deleted = $appointment->delete();
+
+        if ($deleted) {
+            \Illuminate\Support\Facades\Cache::tags(["appointments_{$user->id}"])->flush();
+        }
+
+        return (bool) $deleted;
     }
 }
