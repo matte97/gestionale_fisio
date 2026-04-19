@@ -3,7 +3,7 @@ import {
   CreatePatientHistoryPayload,
   PatientHistory,
   UpdatePatientHistoryPayload,
-} from "./patientHistory.type";
+} from "./Types/patientHistory.type";
 
 type PatientHistoryResponse = {
   success: boolean;

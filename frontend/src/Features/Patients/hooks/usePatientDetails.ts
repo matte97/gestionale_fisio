@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getPatientById } from "../patients.services";
-import { Patient } from "../patients.type";
+import { getPatientById } from "../Services/patients.service";
+import { Patient } from "../Types/patients.type";
 
 export const usePatientDetails = (id: number) => {
   const queryClient = useQueryClient();

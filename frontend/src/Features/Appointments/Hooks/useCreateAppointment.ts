@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreateAppointmentPayload } from "../appointment.type";
+import { CreateAppointmentPayload } from "../Types/appointment.type";
 import { createAppointment } from "../Services/appointments.service";
 
 export const useCreateAppointment = () => {

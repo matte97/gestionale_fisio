@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   CreatePastHistoryPayload,
   UpdatePastHistoryPayload,
-} from "../pastHistory.types";
+} from "../Types/pastHistory.type";
 
 export const usePastHistoryForm = (
   initialData: CreatePastHistoryPayload,

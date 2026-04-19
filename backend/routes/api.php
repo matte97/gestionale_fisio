@@ -1,20 +1,21 @@
 <?php
 
-use App\Http\Controllers\API\AnamnesisController;
-use App\Http\Controllers\Api\AppointmentController;
-use App\Http\Controllers\Api\AppointmentSessionController;
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\ConditionAssessmentController as ApiConditionAssessmentController;
-use App\Http\Controllers\Api\DashboardController as ApiDashboardController;
-use App\Http\Controllers\Api\PastHistoryController;
-use App\Http\Controllers\Api\PatientController;
-use App\Http\Controllers\Api\PatientHistoryController;
-use App\Http\Controllers\Api\TherapyController;
+use App\Http\Controllers\Api\Anamnesis\AnamnesisController;
+use App\Http\Controllers\Api\Appointments\AppointmentController;
+use App\Http\Controllers\Api\Appointments\AppointmentSessionController;
+use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\ConditionAssessment\ConditionAssessmentController as ApiConditionAssessmentController;
+use App\Http\Controllers\Api\Dashboard\DashboardController as ApiDashboardController;
+use App\Http\Controllers\Api\PastHistory\PastHistoryController;
+use App\Http\Controllers\Api\Patients\PatientController;
+use App\Http\Controllers\Api\PatientHistory\PatientHistoryController;
+use App\Http\Controllers\Api\Therapies\TherapyController;
 use Illuminate\Support\Facades\Route;
 
 Route::post("/login", [AuthController::class, "login"]);
 
 Route::middleware("auth:sanctum")->group(function () {
+    Route::get("/me", [AuthController::class, "me"]);
     /*Routes per i pazienti*/
     Route::apiResource("/patients", PatientController::class);
     /*Routes per gli appuntamenti*/

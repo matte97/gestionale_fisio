@@ -1,5 +1,5 @@
 import Input from "../../../Shared/Components/Input";
-import { CreatePatientPayload } from "../patients.type";
+import { CreatePatientPayload } from "../Types/patients.type";
 import { Select } from "../../../Shared/Components/Select";
 import TextArea from "../../../Shared/Components/TextArea";
 

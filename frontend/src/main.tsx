@@ -1,3 +1,6 @@
+import 'temporal-polyfill/global';
+import * as TemporalPolyfill from 'temporal-polyfill';
+(window as any).Temporal = TemporalPolyfill.Temporal;
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";

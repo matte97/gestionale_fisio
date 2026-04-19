@@ -1,8 +1,8 @@
 import { FiFileText } from "react-icons/fi";
 import ActionButton from "../../../Shared/Components/ActionButton";
 import { useNavigate } from "react-router-dom";
-import { useDeletePatients } from "../hooks/useDeletePatient";
-import { Patient } from "../patients.type";
+import { useDeletePatients } from "../Hooks/useDeletePatient";
+import { Patient } from "../Types/patients.type";
 
 type Props = {
   patients: Patient[];

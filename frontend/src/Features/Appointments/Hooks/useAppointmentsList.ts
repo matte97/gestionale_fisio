@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
 import { getAppointments } from "../Services/appointments.service";
-import { Appointment } from "../appointment.type";
+import { Appointment } from "../Types/appointment.type";
 
 export const useAppointmentsList = () => {
   const options: UseQueryOptions<Appointment[], Error> = {

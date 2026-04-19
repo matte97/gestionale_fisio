@@ -1,17 +1,17 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Login from "../Features/Auth/Login";
+import Login from "../Features/Auth/Components/Login";
 import { Dashboard } from "../Features/Dashboard/Components/Dashboard";
 import { Calendar } from "../Features/Calendar/Components/Calendar";
 import { Therapies } from "../Features/Therapies/Components/Therapies";
 import { PatientRecord } from "../Features/Patients/Components/PatientRecord";
 import { DashboardLayout } from "../Layout/DashboardLayout";
-import { PatientListPage } from "../Features/Patients/PatientListPage";
-import { EditPatientPage } from "../Features/Patients/EditPatientPage";
-import { CreatePatientPage } from "../Features/Patients/CreatePatientPage";
-import { CreateAppointmentPage } from "../Features/Appointments/CreateAppointmentPage";
-import { EditAppointmentPage } from "../Features/Appointments/EditAppointmentPage";
-import { CreatePastHistoryPage } from "../Features/PastHistory/CreatePastHistoryPage";
-import { AnamnesisWizard } from "../Features/Anamnesis/AnamnesiWizard";
+import { PatientListPage } from "../Features/Patients/Components/PatientListPage";
+import { EditPatientPage } from "../Features/Patients/Components/EditPatientPage";
+import { CreatePatientPage } from "../Features/Patients/Components/CreatePatientPage";
+import { CreateAppointmentPage } from "../Features/Appointments/Components/CreateAppointmentPage";
+import { EditAppointmentPage } from "../Features/Appointments/Components/EditAppointmentPage";
+import { CreatePastHistoryPage } from "../Features/PastHistory/Components/CreatePastHistoryPage";
+import { AnamnesisWizard } from "../Features/Anamnesis/Components/AnamnesiWizard";
 
 type RouterProps = {
   token: string | null;

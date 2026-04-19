@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CreatePatientHistoryPayload } from "../patientHistory.type";
+import { CreatePatientHistoryPayload } from "../Types/patientHistory.type";
 
 export const usePatientHistoryForm = (
   initialData: CreatePatientHistoryPayload,

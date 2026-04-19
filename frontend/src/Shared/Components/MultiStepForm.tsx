@@ -251,8 +251,7 @@ export function MultiStepForm<T>({
                         nameText={field.nameText}
                         valueCheck={(data as any)[field.nameCheck] ?? false}
                         valueText={(data as any)[field.nameText] ?? ""}
-                        onChangeCheck={(val) => onChange(field.nameCheck, val)}
-                        onChangeText={(val) => onChange(field.nameText, val)}
+                        onChange={onChange}
                       />
                     </div>
                   );

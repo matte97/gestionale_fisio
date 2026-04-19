@@ -4,8 +4,7 @@ type Props = {
   nameText: string;
   valueCheck: boolean;
   valueText: string;
-  onChangeCheck: (val: boolean) => void;
-  onChangeText: (val: string) => void;
+  onChange: (name: string, value: any) => void;
 };
 
 export function CheckboxWithInput({
@@ -14,8 +13,7 @@ export function CheckboxWithInput({
   nameText,
   valueCheck,
   valueText,
-  onChangeCheck,
-  onChangeText,
+  onChange,
 }: Props) {
   return (
     <div className="w-full flex flex-col gap-1">
@@ -23,7 +21,7 @@ export function CheckboxWithInput({
         <input
           type="checkbox"
           checked={valueCheck}
-          onChange={(e) => onChangeCheck(e.target.checked)}
+          onChange={(e) => onChange(nameCheck, e.target.checked)}
           className="transform scale-150"
         />
         {label}
@@ -32,7 +30,7 @@ export function CheckboxWithInput({
         <input
           type="text"
           value={valueText}
-          onChange={(e) => onChangeText(e.target.value)}
+          onChange={(e) => onChange(nameText, e.target.value)}
           className="w-full border p-1 rounded"
         />
       )}

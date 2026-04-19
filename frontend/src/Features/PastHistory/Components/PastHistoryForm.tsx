@@ -1,11 +1,11 @@
 import ActionButton from "../../../Shared/Components/ActionButton";
 import TextArea from "../../../Shared/Components/TextArea";
-import { CreatePastHistoryPayload } from "../pastHistory.types";
+import { CreatePastHistoryPayload } from "../Types/pastHistory.type";
 import { pastHistoryFormLayout } from "../Utils/pastHistoryFormLayout";
 
 type Props = {
   data: CreatePastHistoryPayload;
-  onChange: (e: any) => void;
+  onChange: (name: string, value: any) => void;
   onSubmit?: () => void;
   isLoading?: boolean;
   titolo: string;
@@ -64,13 +64,22 @@ export default function PastHistoryForm({
               <div key={rowIndex} className={`${width} flex gap-3 p-1`}>
                 {row.map((line, lineIndex) => {
                   const key = `${rowIndex}-${lineIndex}`;
+
+                  if (line.type === "section") {
+                    return (
+                      <h3 key={key} className="text-lg font-semibold text-gray-700 w-full border-b border-gray-200 pb-2 mb-2">
+                        {line.title}
+                      </h3>
+                    );
+                  }
+
                   return (
                     <TextArea
-                      label={line.label}
-                      name={line.name}
+                      label={(line as any).label}
+                      name={(line as any).name}
                       onChange={onChange}
                       rows={2}
-                      value={data[line.name]}
+                      value={(data as any)[(line as any).name] || ""}
                       key={key}
                     />
                   );

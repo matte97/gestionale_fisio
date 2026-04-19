@@ -81,7 +81,7 @@ export function Calendar() {
 
                     return {
                         id: String(a.id),
-                        title: a.notes || "Appuntamento",
+                        title: a.patient_name ? `${a.patient_name} - ${a.notes || "Appuntamento"}` : (a.notes || "Appuntamento"),
                         start: startStr,
                         end: endStr
                     };

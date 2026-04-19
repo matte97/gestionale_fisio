@@ -1,13 +1,13 @@
-import RadioGroup from "../../../Shared/Components/RadioGroup";
+import { RadioGroup } from "../../../Shared/Components/RadioGroup";
 import Input from "../../../Shared/Components/Input";
 import { InputDate } from "../../../Shared/Components/InputDate";
 import TextArea from "../../../Shared/Components/TextArea";
-import { CreatePatientHistoryPayload } from "../patientHistory.type";
+import { CreatePatientHistoryPayload } from "../Types/patientHistory.type";
 import { patientHistoryFormLayout } from "../Utils/patientHistoryFormLayout";
 
 type Props = {
   data: CreatePatientHistoryPayload;
-  onChange: (e: React.ChangeEvent<any>) => void;
+  onChange: (name: string, value: any) => void;
   onSubmit?: () => void;
   isLoading?: boolean;
   titolo: string;

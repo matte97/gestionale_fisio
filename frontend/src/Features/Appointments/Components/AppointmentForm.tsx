@@ -1,7 +1,7 @@
 import Input from "../../../Shared/Components/Input";
 import { Select } from "../../../Shared/Components/Select";
 import TextArea from "../../../Shared/Components/TextArea";
-import { AppointmentFormData, CreateAppointmentPayload } from "../appointment.type";
+import { AppointmentFormData, CreateAppointmentPayload } from "../Types/appointment.type";
 
 type Props = {
   data: AppointmentFormData;

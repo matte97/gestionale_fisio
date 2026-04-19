@@ -1,5 +1,5 @@
-import { Appointment, AppointmentFormData, UpdateAppointmentPayload } from "../appointment.type";
-import { CreateAppointmentPayload } from "../appointment.type";
+import { Appointment, AppointmentFormData, UpdateAppointmentPayload } from "../Types/appointment.type";
+import { CreateAppointmentPayload } from "../Types/appointment.type";
 
 const formatDateTime = (date: string, time: string) =>
   `${date} ${time}:00`;

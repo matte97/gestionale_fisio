@@ -1,14 +1,14 @@
-import CheckboxWithInput from "../../../Shared/Components/CheckboxWithInput.tsx";
+import { CheckboxWithInput } from "../../../Shared/Components/CheckboxWithInput";
 import Input from "../../../Shared/Components/Input";
 import { Select } from "../../../Shared/Components/Select";
 import TextArea from "../../../Shared/Components/TextArea";
-import { PhysicalExaminationFormLayout } from "../../PhisycalExaminations/Utils/PhysicalExaminationFormLayout";
-import { CreatePhysicaltherapyDiagnosisPayload } from "../PhysicalTherapyDiagnosis.types";
+import { PhysicalExaminationFormLayout } from "../../PhysicalExaminations/Utils/PhysicalExaminationFormLayout";
+import { CreatePhysicaltherapyDiagnosisPayload } from "../Types/physicalTherapyDiagnosis.type";
 import { PhysicalTherapyDiagnosisFormLayout } from "../Utils/PhysicalTherapyDiagnosisFormLayout";
 
 type Props = {
   data: CreatePhysicaltherapyDiagnosisPayload;
-  onChange: (e: React.ChangeEvent<any>) => void;
+  onChange: (name: string, value: any) => void;
   onSubmit?: () => void;
   isLoading?: boolean;
   titolo: string;
@@ -17,17 +17,17 @@ type Props = {
 };
 
 export function PhysicalTherapyDiagnosis({
-    data,
-    onChange,
-    onSubmit,
-    isLoading,
-    titolo,
-    next,
-    prev
+  data,
+  onChange,
+  onSubmit,
+  isLoading,
+  titolo,
+  next,
+  prev
 }: Props) {
-    const fields = PhysicalTherapyDiagnosisFormLayout;
+  const fields = PhysicalTherapyDiagnosisFormLayout;
 
-    return (
+  return (
     <div className="flex flex-col w-full h-[90vh] bg-white rounded-lg shadow">
       {/* HEADER */}
       <div className="w-full p-2 border-b bg-white sticky top-0 z-10">
@@ -113,9 +113,9 @@ export function PhysicalTherapyDiagnosis({
                       key={key}
                       label={line.label}
                       name={line.name}
-                      value={line.value}
+                      value={data[line.name] || ""}
                       onChange={onChange}
-                      options={line.options}
+                      options={line.options || []}
                     />
                   );
                 }

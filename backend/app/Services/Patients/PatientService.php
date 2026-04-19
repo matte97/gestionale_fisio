@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Services\Patients;
+
+use App\Models\Anamnesis;
+use App\Models\Patient;
+use Illuminate\Support\Facades\DB;
+
+class PatientService
+{
+    public function list($user, array $filters)
+    {
+        return Patient::where("user_id", $user->id)
+            ->with("anamnesis")
+            ->filter($filters)
+            ->orderBy("last_name")
+            ->orderBy("id")
+            ->paginate(10);
+    }
+
+    public function create($user, array $data)
+    {
+        return DB::transaction(function () use ($user, $data) {
+            $data['user_id'] = $user->id;
+
+            $patient = Patient::create($data);
+
+            Anamnesis::create([
+                "user_id" => $user->id,
+                "patient_id" => $patient->id
+            ]);
+
+            \Illuminate\Support\Facades\Cache::tags(["patients_{$user->id}"])->flush();
+
+            return $patient;
+        });
+    }
+
+    public function update($user, string $id, array $data)
+    {
+        $patient = Patient::where("user_id", $user->id)->find($id);
+
+        if (!$patient) {
+            return null;
+        }
+
+        $patient->update($data);
+
+        \Illuminate\Support\Facades\Cache::tags(["patients_{$user->id}"])->flush();
+
+        return $patient;
+    }
+
+    public function findById($user, string $id)
+    {
+        return Patient::where('user_id', $user->id)
+            ->with('anamnesis')
+            ->first();
+    }
+
+    public function delete($user, string $id) 
+    {
+        $patient = Patient::where("user_id", $user->id)->find($id);
+
+        if(!$patient){
+            return false;
+        }
+
+        $deleted = $patient->delete();
+
+        if ($deleted) {
+            \Illuminate\Support\Facades\Cache::tags(["patients_{$user->id}"])->flush();
+        }
+
+        return (bool) $deleted;
+    }
+}

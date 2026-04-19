@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AppointmentFormData, CreateAppointmentPayload } from "../appointment.type";
+import { AppointmentFormData, CreateAppointmentPayload } from "../Types/appointment.type";
 import { mapFormToCreatePayload } from "../Services/appointments.mapper";
 
 export const useAppointmentForm = (initialData: AppointmentFormData) => {

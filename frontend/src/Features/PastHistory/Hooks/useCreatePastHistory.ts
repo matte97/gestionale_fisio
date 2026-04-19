@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CreatePastHistoryPayload } from "../pastHistory.types";
-import { createPastHistory } from "../pastHistory.services";
+import { CreatePastHistoryPayload } from "../Types/pastHistory.type";
+import { createPastHistory } from "../Services/pastHistory.service";
 
 export function useCreatePastHistory(anamnesisId: number){
     const queryClient = useQueryClient();

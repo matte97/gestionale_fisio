@@ -1,6 +1,6 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { getTherapies } from "../therapies.services";
-import { Therapie } from "../therapies.type";
+import { getTherapies } from "../Services/therapies.service";
+import { Therapie } from "../Types/therapy.type";
 
 export const useTherapiesList = () => {
     const options: UseQueryOptions<Therapie[], Error> = {

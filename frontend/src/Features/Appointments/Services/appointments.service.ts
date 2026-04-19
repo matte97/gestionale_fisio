@@ -3,7 +3,7 @@ import {
   Appointment,
   CreateAppointmentPayload,
   UpdateAppointmentPayload,
-} from "../appointment.type";
+} from "../Types/appointment.type";
 
 type AppointmentsResponse = {
   success: boolean;

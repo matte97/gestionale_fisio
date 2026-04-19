@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAppointmentById } from "../Services/appointments.service";
-import { Appointment } from "../appointment.type";
+import { Appointment } from "../Types/appointment.type";
 
 export const useAppointmentDetails = (id: number, patientId: number) => {
     const queryClient = useQueryClient();
