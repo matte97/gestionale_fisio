@@ -49,7 +49,25 @@ class AnamnesisController extends Controller
 
     public function show(string $id)
     {
-        //
+        $anamnesis = Anamnesis::with([
+            'patient_history.symptoms',
+            'past_history',
+            'condition_assessment',
+            'physical_examination',
+            'physical_therapy_diagnosis'
+        ])->find($id);
+
+        if (!$anamnesis) {
+            return response()->json([
+                "success" => false,
+                "message" => "Scheda anamnestica non trovata"
+            ], 404);
+        }
+
+        return response()->json([
+            "success" => true,
+            "data" => new AnamnesisResource($anamnesis)
+        ]);
     }
 
     public function update(Request $request, string $id)

@@ -20,10 +20,9 @@ class AppointmentController extends Controller
         $patientId = $request->query("patient_id");
         $appointments = $service->list($request->user(),$patientId);
 
-        return response()->json([
+        return AppointmentResource::collection($appointments)->additional([
             "success" => true,
-            "message" => "Appuntamenti caricati con successo",
-            "data"    => AppointmentResource::collection($appointments)
+            "message" => "Appuntamenti caricati con successo"
         ]);
     }
 

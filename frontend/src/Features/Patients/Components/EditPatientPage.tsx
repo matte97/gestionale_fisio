@@ -1,42 +1,17 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { usePatientDetails } from "../Hooks/usePatientDetails";
-import { useUpdatePatient } from "../Hooks/useUpdatePatient";
-import { usePatientForm } from "../Hooks/usePatientForm";
+import { useEditPatientPage } from "../Hooks/useEditPatientPage";
 import { PatientForm } from "./PatientForm";
 
 export function EditPatientPage() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  const { patient, isLoading, form, isUpdating, handleSubmit } = useEditPatientPage();
 
-  const { data: patient, isLoading } = usePatientDetails(Number(id));
-
-  const { mutate} = useUpdatePatient();
-
-  const form = usePatientForm({
-    first_name: patient?.first_name,
-    last_name: patient?.last_name,
-    email: patient?.email,
-    address: patient?.address,
-    birth_date: patient?.birth_date,
-    phone: patient?.phone || "",
-    gender: patient?.gender || "Altro",
-    occupation: patient?.occupation || "",
-    sports_hobbies: patient?.sports_hobbies || "",
-    marital_status: patient?.marital_status || "",
-    diagnosis: patient?.diagnosis || "",
-  });
-
-  const handleSubmit = () => {
-    mutate({ id: patient.patient_id!, payload: form.data }, {
-      onSuccess: () => navigate("/pazienti"),
-    });
-  };
+  if (isLoading || !patient) return <div>Caricamento...</div>;
 
   return (
     <PatientForm
       data={form.data}
       onChange={form.handleChange}
       onSubmit={handleSubmit}
+      isLoading={isUpdating}
       titolo="Modifica paziente"
     />
   );
