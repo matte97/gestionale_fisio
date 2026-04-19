@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axiosClient from "../../../Api/axiosClient";
 import TherapyForm from "./TherapyForm";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { Pagination } from "../../../Shared/Components/Pagination";
 
 type Therapy = {
     id: number;
@@ -11,14 +12,15 @@ type Therapy = {
 };
 
 export function Therapies() {
-    const [therapies, setTherapies] = useState<Therapy[]>([]);
+    const [therapiesData, setTherapiesData] = useState<any>(null);
     const [selectedTherapy, setSelectedTherapy] = useState<Therapy | null>(null);
     const [mode, setMode] = useState<"none" | "edit" | "create">("none");
 
-    const loadTherapies = async () => {
+    const loadTherapies = async (page: number = 1) => {
         try {
-            const res = await axiosClient.get("/therapies");
-            setTherapies(res.data.data);
+            const res = await axiosClient.get("/therapies", { params: { page } });
+            console.log("DEBUG THERAPIES DATA:", res.data);
+            setTherapiesData(res.data);
         } catch (err) {
             console.error(err);
         }
@@ -47,7 +49,7 @@ export function Therapies() {
     const handleDelete = async (id: number) => {
         try {
             await axiosClient.delete(`/therapies/${id}`);
-            setTherapies(prev => prev.filter(t => t.id !== id));
+            loadTherapies(); // Reload to refresh list and pagination
             if (selectedTherapy?.id === id) {
                 setMode("none");
                 setSelectedTherapy(null);
@@ -58,7 +60,7 @@ export function Therapies() {
     };
 
     return (
-        <div className="w-full max-w-7xl mx-auto animate-fade-in flex flex-col h-[calc(100vh-140px)] min-h-[500px]">
+        <div className="w-full max-w-7xl mx-auto animate-fade-in flex flex-col h-full overflow-hidden">
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6 flex shrink-0 justify-between items-center">
                 <div>
@@ -89,7 +91,7 @@ export function Therapies() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50">
-                                {therapies.map((t) => (
+                                {therapiesData?.data.map((t: any) => (
                                     <tr
                                         key={t.id}
                                         className={`cursor-pointer transition-colors group ${selectedTherapy?.id === t.id ? 'bg-indigo-50 border-l-4 border-l-indigo-600' : 'bg-white hover:bg-gray-50 border-l-4 border-l-transparent'}`}
@@ -115,7 +117,7 @@ export function Therapies() {
                                         </td>
                                     </tr>
                                 ))}
-                                {therapies.length === 0 && (
+                                {(!therapiesData || therapiesData.data.length === 0) && (
                                     <tr>
                                         <td colSpan={3} className="px-6 py-12 text-center italic text-gray-400">
                                             Nessuna terapia censita a sistema.
@@ -125,6 +127,20 @@ export function Therapies() {
                             </tbody>
                         </table>
                     </div>
+                    
+                    {/* Pagination */}
+                    {therapiesData?.meta && (
+                        <div className="bg-white border-t border-gray-100">
+                             <Pagination
+                                currentPage={therapiesData.meta.current_page}
+                                lastPage={therapiesData.meta.last_page}
+                                total={therapiesData.meta.total}
+                                from={therapiesData.meta.from}
+                                to={therapiesData.meta.to}
+                                onPageChange={(p) => loadTherapies(p)}
+                            />
+                        </div>
+                    )}
                 </div>
 
                 <div className="w-1/2 h-full flex flex-col">

@@ -46,7 +46,7 @@ export function Router({ token }: RouterProps) {
 
           {/*Rotte scheda anamnestica*/}
           <Route
-            path="/anamnesi"
+            path="/pazienti/:patientId/anamnesi"
             element={<AnamnesisWizard/>}
           />
 

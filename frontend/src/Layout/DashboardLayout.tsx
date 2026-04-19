@@ -136,7 +136,7 @@ export function DashboardLayout() {
         </header>
 
         {/* PAGE CONTENT (SCROLLABLE OUTLET) */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-8 relative z-0">
+        <main className={`flex-1 ${pathname.includes("/anamnesi") || pathname.includes("/pazienti") || pathname.includes("/dashboard") ? "overflow-hidden" : "overflow-y-auto"} p-4 sm:p-8 relative z-0`}>
           <Outlet />
         </main>
 

@@ -18,10 +18,10 @@ class PatientController extends Controller
     {
         $patients = $service->list(
             $request->user(),
-            $request->only('first_name')
+            $request->only(['search', 'first_name', 'last_name', 'gender', 'diagnosis', 'birth_year'])
         );
 
-        return response()->json($patients);
+        return response()->json(array_merge($patients->toArray(), ['success' => true]));
     }
 
 

@@ -58,7 +58,7 @@ export function Dashboard() {
   const isGrowthPositive = growth >= 0;
 
   return (
-    <div className="w-full max-w-7xl mx-auto flex flex-col gap-8 animate-fade-in pb-10">
+    <div className="w-full max-w-7xl mx-auto flex flex-col gap-8 animate-fade-in h-full overflow-y-auto pr-2 custom-scrollbar">
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 

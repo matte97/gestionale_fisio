@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreatePastHistoryPayload } from "../PastHistory/pastHistory.types";
 import { CreatePatientHistoryPayload } from "../PatientHistory/patientHistory.type";
 import { CreateAnamnesisPayload } from "./anamnesis.type";
@@ -12,7 +12,7 @@ import { conditionAssesmentsFormLayout } from "../ConditionAssesment/Utils/condi
 import { pastHistoryFormLayout } from "../PastHistory/Utils/pastHistoryFormLayout";
 import { patientHistoryFormLayout } from "../PatientHistory/Utils/patientHistoryFormLayout";
 import axiosClient from "../../Api/axiosClient";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type FormDataMulti = {
   anamnesi: CreateAnamnesisPayload;
@@ -24,16 +24,23 @@ type FormDataMulti = {
 };
 
 export function AnamnesisWizard() {
+  const { patientId } = useParams<{ patientId: string }>();
   const [step, setStep] = useState(0);
 
   const [formData, setFormData] = useState<FormDataMulti>({
-    anamnesi: {} as CreateAnamnesisPayload,
+    anamnesi: { patient_id: Number(patientId) } as CreateAnamnesisPayload,
     patientHistory: {} as CreatePatientHistoryPayload,
     pastHistory: {} as CreatePastHistoryPayload,
     conditionAssesment: {} as CreateConditionAssesmentPayload,
     physicalExamination: {} as CreatePhysicalExaminationPayload,
     physicalTherapyDiagnosis: {} as CreatePhysicaltherapyDiagnosisPayload,
   });
+
+  useEffect(() => {
+    if (patientId) {
+      updateData("anamnesi", { patient_id: Number(patientId) });
+    }
+  }, [patientId]);
 
   const updateData = <K extends keyof FormDataMulti>(
     key: K,
@@ -58,14 +65,15 @@ export function AnamnesisWizard() {
     try {
       await axiosClient.post("/anamnesis", formData);
       alert("Anamnesi salvata con successo!");
-      
+
       // Assumendo anamnesi.patient_id sia popolato:
       if (formData.anamnesi.patient_id) {
-         navigate(`/pazienti/${formData.anamnesi.patient_id}/record`);
+        navigate(`/pazienti/${formData.anamnesi.patient_id}/record`);
       } else {
-         navigate(`/pazienti`);
+        navigate(`/pazienti`);
       }
     } catch (error) {
+      console.log(formData);
       console.error("Errore salvataggio anamnesi:", error);
       alert("Errore durante il salvataggio. Controlla la console.");
     } finally {

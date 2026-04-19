@@ -28,7 +28,7 @@ export function MultiStepForm<T>({
   isLoading,
 }: Props<T>) {
   return (
-    <div className="flex flex-col w-full h-[90vh] bg-gray-50 rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div className="flex flex-col w-full h-full bg-gray-50 rounded-xl border border-gray-200 shadow-sm overflow-hidden">
       {/* HEADER STICKY */}
       <div className="w-full px-6 py-4 border-b border-gray-200 bg-white sticky top-0 z-10 flex items-center justify-between">
         {prev ? (

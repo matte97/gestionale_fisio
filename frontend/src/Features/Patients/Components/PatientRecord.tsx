@@ -48,7 +48,7 @@ export function PatientRecord() {
   }, [patientId]);
 
   const goToPatientHistory = () => {
-      navigate(`/anamnesi`);   
+      navigate(`/pazienti/${patientId}/anamnesi`);   
   };
 
   return (
