@@ -21,11 +21,7 @@ class PatientController extends Controller
             $request->only('first_name')
         );
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Pazienti caricati con successo',
-            'data' => PatientResource::collection($patients)
-        ]);
+        return response()->json($patients);
     }
 
 

@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\Log;
 
 class AnamnesisController extends Controller
 {
-    public function indexForPatient($patient_id, Request $request)
+    public function indexForPatient($patient, Request $request)
     {
         $user = $request->user();
 
-        $anamnesis = Anamnesis::select("id")
-            ->where("user_id", $user->id)
-            ->where("patient_id", $patient_id)
-            ->get();
+        $anamnesis = Anamnesis::where("user_id", $user->id)
+            ->where("patient_id", $patient)
+            ->orderBy('created_at', 'desc')
+            ->get(['id', 'created_at']);
 
         return response()->json([
             "success" => true,

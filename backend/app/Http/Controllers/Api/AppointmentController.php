@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 class AppointmentController extends Controller
 {
 
-    public function index(Request $request, AppointmentService $service, $patientId)
+    public function index(Request $request, AppointmentService $service)
     {
         $patientId = $request->query("patient_id");
         $appointments = $service->list($request->user(),$patientId);

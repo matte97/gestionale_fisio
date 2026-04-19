@@ -10,16 +10,12 @@ class PatientService
 {
     public function list($user, array $filters)
     {
-        $cacheKey = "patients_user_{$user->id}_" . md5(json_encode($filters));
-
-        return \Illuminate\Support\Facades\Cache::tags(["patients_{$user->id}"])->remember($cacheKey, 3600, function () use ($user, $filters) {
-            return Patient::where("user_id", $user->id)
-                ->with("anamnesis")
-                ->filter($filters)
-                ->orderBy("last_name")
-                ->orderBy("id")
-                ->cursorPaginate(10);
-        });
+        return Patient::where("user_id", $user->id)
+            ->with("anamnesis")
+            ->filter($filters)
+            ->orderBy("last_name")
+            ->orderBy("id")
+            ->paginate(10);
     }
 
     public function create($user, array $data)

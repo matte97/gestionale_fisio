@@ -13,10 +13,7 @@ class TherapyController extends Controller
     {
         $therapies = $service->list($request->user());
 
-        return response()->json([
-            "success" => true,
-            "data" => $therapies
-        ]);
+        return response()->json($therapies);
     }
 
     public function store(StoreTherapyRequest $request, TherapyService $service)

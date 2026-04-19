@@ -15,10 +15,10 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->foreignId('anamnesis_id')->constrained('anamneses')->onDelete('cascade');
 
-            $table->text('main_problem');
-            $table->text('patient_goals');
-            $table->enum('onset', ['traumatic', 'insidious']);
-            $table->string('cause_of_onset');
+            $table->text('main_problem')->nullable();
+            $table->text('patient_goals')->nullable();
+            $table->enum('onset', ['traumatic', 'insidious'])->nullable();
+            $table->string('cause_of_onset')->nullable();
             $table->date('onset_date')->nullable();    
             $table->text('symptomps_relationship')->nullable(); 
             $table->text('other_signs_symptomps')->nullable();

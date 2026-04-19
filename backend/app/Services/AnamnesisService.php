@@ -55,10 +55,15 @@ class AnamnesisService
                 $anamnesis->physical_therapy_diagnosis()->create($data['physicalTherapyDiagnosis']);
             }
 
-            return $anamnesis->load([
+            $anamnesis->load([
                 'patient_history', 'past_history', 'condition_assessment', 
                 'physical_examination', 'physical_therapy_diagnosis'
             ]);
+
+            // Flush cache pazienti per aggiornare la vista record
+            \Illuminate\Support\Facades\Cache::tags(["patients_{$user->id}"])->flush();
+
+            return $anamnesis;
         });
     }
 }

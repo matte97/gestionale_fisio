@@ -9,11 +9,7 @@ class TherapyService
 {
     public function list($user)
     {
-        $cacheKey = "therapies_user_{$user->id}";
-
-        return Cache::tags(["therapies_{$user->id}"])->remember($cacheKey, 3600, function () use ($user) {
-            return Therapy::select('id', 'name', 'color')->where('user_id', $user->id)->get();
-        });
+        return Therapy::select('id', 'name', 'color')->where('user_id', $user->id)->paginate(15);
     }
 
     public function create($user, array $data)
